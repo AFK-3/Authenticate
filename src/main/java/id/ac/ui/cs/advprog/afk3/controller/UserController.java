@@ -4,6 +4,10 @@ import id.ac.ui.cs.advprog.afk3.model.Enum.UserType;
 import id.ac.ui.cs.advprog.afk3.model.UserEntity;
 import id.ac.ui.cs.advprog.afk3.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +40,11 @@ public class UserController {
     @GetMapping("/list")
     public String userListPage(Model model){
         List<UserEntity> allUsers = userService.findAll();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails jwtUser = (UserDetails) auth.getPrincipal();
+        UserEntity user = userService.findByUsername(jwtUser.getUsername());
+        System.out.println(user.getUsername());
+        model.addAttribute("userlogedin", user);
         model.addAttribute("users", allUsers);
         return listHTML;
     }
