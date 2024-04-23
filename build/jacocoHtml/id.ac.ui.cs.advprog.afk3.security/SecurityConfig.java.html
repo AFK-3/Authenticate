@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">afk3</a> &gt; <a href="index.source.html" class="el_package">id.ac.ui.cs.advprog.afk3.security</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">package id.ac.ui.cs.advprog.afk3.security;
+
+import id.ac.ui.cs.advprog.afk3.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    private UserService userDetailsService;
+
+    private JwtAuthEntryPoint authEntryPoint;
+
+    @Autowired
+<span class="fc" id="L27">    public SecurityConfig(UserService userDetailsService, JwtAuthEntryPoint a) {</span>
+<span class="fc" id="L28">        this.userDetailsService = userDetailsService;</span>
+<span class="fc" id="L29">        this.authEntryPoint = a;</span>
+<span class="fc" id="L30">    }</span>
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws  Exception{
+<span class="fc" id="L35">        http</span>
+<span class="fc" id="L36">                .csrf().disable()</span>
+<span class="fc" id="L37">                .exceptionHandling()</span>
+<span class="fc" id="L38">                .authenticationEntryPoint(authEntryPoint)</span>
+<span class="fc" id="L39">                .and()</span>
+<span class="fc" id="L40">                .sessionManagement()</span>
+<span class="fc" id="L41">                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)</span>
+<span class="fc" id="L42">                .and()</span>
+<span class="fc" id="L43">                .authorizeRequests()</span>
+<span class="fc" id="L44">                .dispatcherTypeMatchers(HttpMethod.GET).authenticated()</span>
+<span class="fc" id="L45">                .requestMatchers(&quot;/api/auth/**&quot;).permitAll()</span>
+<span class="fc" id="L46">                .anyRequest().authenticated()</span>
+<span class="fc" id="L47">                .and()</span>
+<span class="fc" id="L48">                .httpBasic();</span>
+<span class="fc" id="L49">        http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);</span>
+<span class="fc" id="L50">        return http.build();</span>
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+<span class="fc" id="L57">        return authenticationConfiguration.getAuthenticationManager();</span>
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+<span class="fc" id="L62">        return new BCryptPasswordEncoder();</span>
+    }
+
+    @Bean
+    public JwtAuthFilter jwtAuthFilter(){
+<span class="fc" id="L67">        return new JwtAuthFilter();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
