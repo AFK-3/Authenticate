@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("in loadByUsername");
         UserEntity user = userRepository.findByUsername(username);
+        System.out.println(username);
         if(user==null){
             throw new UsernameNotFoundException("user not found");
         }
