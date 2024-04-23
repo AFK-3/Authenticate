@@ -28,7 +28,7 @@ public class UserRepository {
         newUser.setPassword(pe.encode("pass"));
         newUser.setType("SELLER");
         userData.add(newUser);
-        System.out.println("zczc "+userData.getFirst());
+        System.out.println("zczc "+userData.getFirst().getUsername());
     }
 
     public UserEntity createUser(UserEntity newUser){
