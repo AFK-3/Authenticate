@@ -7,11 +7,12 @@ plugins {
 
 group = "id.ac.ui.cs.advprog"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_21
 }
+
+//extra["springCloudVersion"] = "2023.0.0"
 
 configurations {
 	compileOnly {
@@ -31,6 +32,7 @@ dependencies {
 	implementation("org.postgresql:postgresql")
 	implementation("io.jsonwebtoken:jjwt:0.2")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+	implementation("org.springframework.cloud:spring-cloud-starter-gateway-mvc:4.1.3")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -38,6 +40,12 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 }
+
+//dependencyManagement {
+//	imports {
+//		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+//	}
+//}
 
 tasks.withType<Test> {
 	useJUnitPlatform()
