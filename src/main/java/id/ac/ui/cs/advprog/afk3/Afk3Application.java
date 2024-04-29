@@ -17,6 +17,7 @@ public class Afk3Application {
 
 	@Value("${app.sell-domain}")
 	String url_gcp_sell ;
+	String URL_GCP_PAYMENT = "http://34.124.178.74";
 	public static void main(String[] args) {
 		SpringApplication.run(Afk3Application.class, args);
 	}
@@ -63,5 +64,33 @@ public class Afk3Application {
 	@Bean
 	public RouterFunction<ServerResponse> toPostOrderSetStatus() {
 		return route("order/set-status/**").POST("/order/set-status/**", http(url_gcp_sell)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toPostPaymentRequest() {
+		return route("payment-request/create").POST("/payment-request/create", http(URL_GCP_PAYMENT)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetAllPaymentRequest() {
+		return route("payment-request/get-all").GET("/payment-request/get-all", http(URL_GCP_PAYMENT)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetAllPaymentRequestByUsername() {
+		return route("payment-request/get-all-by-buyer-username/**").GET("/payment-request/get-all-by-buyer-username/**", http(URL_GCP_PAYMENT)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetOnePaymentRequestById() {
+		return route("payment-request/get-one-by-id/**").GET("/payment-request/get-one-by-id/**", http(URL_GCP_PAYMENT)).build();
+	}
+
+	public RouterFunction<ServerResponse> toDeletePaymentRequestById() {
+		return route("payment-request/delete-by-id/**").DELETE("/payment-request/delete-by-id/**", http(URL_GCP_PAYMENT)).build();
+	}
+
+	public RouterFunction<ServerResponse> toCancelPaymentRequestById() {
+		return route("payment-request/cancel/**").PATCH("/payment-request/cancel/**", http(URL_GCP_PAYMENT)).build();
 	}
 }
