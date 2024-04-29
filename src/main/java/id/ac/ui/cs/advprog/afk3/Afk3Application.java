@@ -3,6 +3,7 @@ package id.ac.ui.cs.advprog.afk3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,6 +14,7 @@ import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFuncti
 
 @SpringBootApplication
 @EnableConfigurationProperties
+@ConfigurationProperties(prefix = "app")
 public class Afk3Application {
 
 	@Value("${app.sell-domain}")
