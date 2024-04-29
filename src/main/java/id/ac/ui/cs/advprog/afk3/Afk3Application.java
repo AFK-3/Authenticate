@@ -13,7 +13,6 @@ import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouter
 import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
 
 @SpringBootApplication
-@EnableConfigurationProperties
 @ConfigurationProperties(prefix = "app")
 public class Afk3Application {
 
