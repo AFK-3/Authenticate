@@ -55,6 +55,7 @@ public class UserRepository {
                         .setCurrent(updatedUser)
                         .addUsername(username)
                         .addPassword(user.getPassword())
+                        .addType(user.getType())
                         .build();
                 userData.remove(i);
                 userData.add(i,newUser);
