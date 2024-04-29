@@ -18,7 +18,7 @@ import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFuncti
 @ConfigurationProperties(prefix = "app")
 public class Afk3Application {
 
-	String url_gcp_sell = "http://35.198.243.155";
+	String url_gcp_sell = "http://34.126.165.220/";
 	String URL_GCP_PAYMENT = "http://34.124.178.74";
 	public static void main(String[] args) {
 		SpringApplication.run(Afk3Application.class, args);
