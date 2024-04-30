@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.function.RouterFunction;
@@ -16,8 +17,7 @@ import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFuncti
 @SpringBootApplication
 public class Afk3Application {
 
-	@Value("${app.sell-domain}")
-	String url_gcp_sell ;
+	String url_gcp_sell = "http://34.126.165.220/";
 	String URL_GCP_PAYMENT = "http://34.124.178.74";
 	public static void main(String[] args) {
 		SpringApplication.run(Afk3Application.class, args);
