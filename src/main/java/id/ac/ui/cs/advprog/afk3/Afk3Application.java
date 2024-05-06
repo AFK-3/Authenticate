@@ -97,4 +97,9 @@ public class Afk3Application {
 	public RouterFunction<ServerResponse> toCancelPaymentRequestById() {
 		return route("payment-request/cancel/**").PATCH("/payment-request/cancel/**", http(URL_GCP_PAYMENT)).build();
 	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toRespondPaymentRequestById() {
+		return route("payment-request/respond/**").PATCH("/payment-request/respond/**", http(URL_GCP_PAYMENT)).build();
+	}
 }
