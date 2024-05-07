@@ -43,11 +43,6 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder addMoney(long newMoney){
-        currentUser.setMoney(newMoney);
-        return this;
-    }
-
     public UserBuilder addType(String type){
         if (UserType.contains(type)){
             currentUser.setType(type);
