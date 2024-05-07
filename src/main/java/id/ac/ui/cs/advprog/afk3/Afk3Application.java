@@ -3,12 +3,8 @@ package id.ac.ui.cs.advprog.afk3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.function.RouterFunction;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.servlet.function.ServerResponse;
 
 import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions.route;
@@ -24,24 +20,8 @@ public class Afk3Application {
 		SpringApplication.run(Afk3Application.class, args);
 	}
 	@Bean
-	public RouterFunction<ServerResponse> toUserSellerList() {
-		return route("userSeller/list").GET("/userSeller/list", http(url_gcp_sell)).build();
-	}
-	@Bean
 	public RouterFunction<ServerResponse> toListingList() {
 		return route("listing/list").GET("/listing/list", http(url_gcp_sell)).build();
-	}
-	@Bean
-	public RouterFunction<ServerResponse> toUserSellerCreate() {
-		return route("userSeller/create").GET("/userSeller/create", http(url_gcp_sell)).build();
-	}
-	@Bean
-	public RouterFunction<ServerResponse> toPostUserSellerCreate() {
-		return route("userSeller/create").POST("/userSeller/create", http(url_gcp_sell)).build();
-	}
-	@Bean
-	public RouterFunction<ServerResponse> toPostUserSellerEdit() {
-		return route("userSeller/create").POST("/userSeller/edit", http(url_gcp_sell)).build();
 	}
 	@Bean
 	public RouterFunction<ServerResponse> toPostListingCreate() {
@@ -54,6 +34,14 @@ public class Afk3Application {
 	@Bean
 	public RouterFunction<ServerResponse> toPostListingDelete() {
 		return route("listing/delete").POST("/listing/delete", http(url_gcp_sell)).build();
+	}
+	@Bean
+	public RouterFunction<ServerResponse> toGetListingGetById(){
+		return route("listing/get-by-id/**").POST("/listing/get-by-id/**", http(url_gcp_sell)).build();
+	}
+	@Bean
+	public RouterFunction<ServerResponse> toGetListingGetBySeller(){
+		return route("listing/get-by-seller").POST("/listing/get-by-seller", http(url_gcp_sell)).build();
 	}
 	@Bean
 	public RouterFunction<ServerResponse> toPostOrderCreate() {
