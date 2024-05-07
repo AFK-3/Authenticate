@@ -14,6 +14,7 @@ public class UserBuilder {
 
     public UserBuilder reset(){
         currentUser = new UserEntity();
+        currentUser.setMoney(0);
         return this;
     }
 
@@ -39,6 +40,11 @@ public class UserBuilder {
 
     public UserBuilder addPhoneNumber(String phoneNumber){
         currentUser.setPhoneNumber(phoneNumber);
+        return this;
+    }
+
+    public UserBuilder addMoney(long newMoney){
+        currentUser.setMoney(newMoney);
         return this;
     }
 
