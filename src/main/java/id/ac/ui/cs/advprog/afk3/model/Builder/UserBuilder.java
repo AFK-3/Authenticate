@@ -14,7 +14,6 @@ public class UserBuilder {
 
     public UserBuilder reset(){
         currentUser = new UserEntity();
-        currentUser.setMoney(0);
         return this;
     }
 
