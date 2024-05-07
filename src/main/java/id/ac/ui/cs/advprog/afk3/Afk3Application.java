@@ -84,11 +84,18 @@ public class Afk3Application {
 		return route("payment-request/get-one-by-id/**").GET("/payment-request/get-one-by-id/**", http(URL_GCP_PAYMENT)).build();
 	}
 
+	@Bean
 	public RouterFunction<ServerResponse> toDeletePaymentRequestById() {
 		return route("payment-request/delete-by-id/**").DELETE("/payment-request/delete-by-id/**", http(URL_GCP_PAYMENT)).build();
 	}
 
+	@Bean
 	public RouterFunction<ServerResponse> toCancelPaymentRequestById() {
 		return route("payment-request/cancel/**").PATCH("/payment-request/cancel/**", http(URL_GCP_PAYMENT)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toRespondPaymentRequestById() {
+		return route("payment-request/respond/**").PATCH("/payment-request/respond/**", http(URL_GCP_PAYMENT)).build();
 	}
 }
