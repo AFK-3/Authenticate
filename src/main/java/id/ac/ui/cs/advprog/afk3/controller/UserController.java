@@ -89,7 +89,7 @@ public class UserController {
     }
 
     @GetMapping("/get-role")
-    public ResponseEntity<String> getUsernameAndRole(){
+    public ResponseEntity<String> getRole(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails jwtUser = (UserDetails) auth.getPrincipal();
         UserEntity user = userService.findByUsername(jwtUser.getUsername());
