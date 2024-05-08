@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.servlet.function.ServerResponse;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions.route;
 import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
 
+@CrossOrigin(origins = "*")
 @SpringBootApplication
 public class Afk3Application {
 
