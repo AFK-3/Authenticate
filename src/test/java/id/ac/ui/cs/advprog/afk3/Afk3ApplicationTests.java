@@ -10,6 +10,7 @@ class Afk3ApplicationTests {
 
 	@Test
 	void contextLoads() {
+		Afk3Application.main(new String[] {});
 	}
 
 }
