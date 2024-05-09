@@ -58,14 +58,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void update (String userId, UserEntity user){
+    public boolean update (String userId, UserEntity user){
         Optional<UserEntity> userToUpdate = userRepository.findById(userId);
         if(userToUpdate.isPresent()){
             userToUpdate.get().setName(user.getName());
             userToUpdate.get().setAddress(user.getAddress());
             userToUpdate.get().setPhonenumber(user.getPhonenumber());
             userRepository.save(userToUpdate.get());
+            return true;
         }
+        return false;
     }
 
     @Override

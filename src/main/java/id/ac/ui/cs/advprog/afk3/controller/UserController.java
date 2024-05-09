@@ -42,7 +42,7 @@ public class UserController {
         Optional<UserEntity> user = userService.findByUsername(jwtUser.getUsername());
         System.out.println(user.isPresent() ? user.get().getUsername():null);
         ModelAndView modelAndView = new ModelAndView(listHTML);
-        modelAndView.addObject("userlogedin", user);
+        modelAndView.addObject("userlogedin", user.get());
         modelAndView.addObject("users", allUsers);
         return modelAndView;
     }
@@ -56,10 +56,12 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<UserEntity> editProductPost(@ModelAttribute("user") UserEntity user, Model model){
+    public ResponseEntity<String> editProductPost(@ModelAttribute("user") UserEntity user, Model model){
         System.out.println(user.getUsername());
-        userService.update(user.getUsername(), user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        if (userService.update(user.getUsername(), user)){
+            return new ResponseEntity<>("Edit on "+user.getUsername()+" was SUCCESSful", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Edit on "+user.getUsername()+" was FAILED", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/get-username")
