@@ -25,12 +25,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         System.out.println("userfindbyid "+user.getUsername()+userRepository.findById(user.getUsername()).isEmpty());
         if(userRepository.findById(user.getUsername()).isEmpty() &&
                 fieldValid(user)){
-            user.setPassword(user.getPassword());
             userRepository.save(user);
             return user;
-        }else{
-            throw new IllegalArgumentException();
         }
+        return null;
     }
 
     public boolean fieldValid(UserEntity user){
