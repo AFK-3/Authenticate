@@ -9,6 +9,6 @@ public interface UserService{
     public UserEntity create(UserEntity user);
     public List<UserEntity> findAll();
     Optional<UserEntity> findByUsername(String username);
-    public void update(String userId, UserEntity user);
+    public boolean update(String userId, UserEntity user);
     public void deleteUserById(String userId);
 }
