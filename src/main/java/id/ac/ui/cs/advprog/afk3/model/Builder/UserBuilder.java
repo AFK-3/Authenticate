@@ -38,7 +38,7 @@ public class UserBuilder {
     }
 
     public UserBuilder addPhoneNumber(String phoneNumber){
-        currentUser.setPhoneNumber(phoneNumber);
+        currentUser.setPhonenumber(phoneNumber);
         return this;
     }
 

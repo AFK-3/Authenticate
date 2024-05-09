@@ -27,27 +27,27 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+
     @Autowired
     public AuthController(AuthenticationManager authenticationManager,
-                          UserRepository userRepository,
+                          UserService userService,
                           PasswordEncoder passwordEncoder,
                           JwtGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
         this.jwtGenerator = jwtGenerator;
     }
     private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private UserService userService;
 
     @Autowired
     private UserBuilder userEntityBuilder;
 
     private JwtGenerator jwtGenerator;
 
-    @Autowired
-    private UserService userService;
+    private  PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
     public ModelAndView login(Model model){
@@ -60,33 +60,35 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(@ModelAttribute LoginDto loginDto, Model model){
+    public ResponseEntity<String> login(@ModelAttribute LoginDto loginDto, Model model){
         System.out.println("after login "+loginDto.getUsername());
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword()));
+        UsernamePasswordAuthenticationToken aa = new UsernamePasswordAuthenticationToken(
+                loginDto.getUsername(),
+                loginDto.getPassword());
+        System.out.println(aa.getPrincipal()+" "+aa.getCredentials()+" "+aa.getDetails());
+        Authentication authentication = authenticationManager.authenticate(aa);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("postlogin.html");
-        model.addAttribute("token", token);
-        return modelAndView;
+        return new ResponseEntity<String>(token,HttpStatus.OK);
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        if (userRepository.findByUsername(registerDto.getUsername())!=null) {
+        if (userService.findByUsername(registerDto.getUsername()).isPresent()) {
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
         }
 
         UserEntity user = userEntityBuilder.reset()
                 .addUsername(registerDto.getUsername())
-                .addPassword(passwordEncoder.encode((registerDto.getPassword())))
+                .addPassword(passwordEncoder.encode(registerDto.getPassword()))
                 .addType(registerDto.getType())
+                .addPhoneNumber(registerDto.getPhonenumber())
+                .addAddress(registerDto.getAddress())
+                .addName(registerDto.getName())
                 .build();
 
-        userRepository.createUser(user);
+        userService.create(user);
 
         return new ResponseEntity<>("User registered success!", HttpStatus.OK);
     }

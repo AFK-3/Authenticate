@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -33,27 +34,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/create")
-    public String createUserPage(Model model){
-        UserEntity user = new UserEntity();
-        model.addAttribute("user", user);
-        model.addAttribute("types", UserType.getAll());
-        return createHTML;
-    }
-
-    @PostMapping("/create")
-    public String createUserPost(@ModelAttribute("product") UserEntity user, Model model){
-        userService.create(user);
-        return "redirect:list";
-    }
-
     @GetMapping("/list")
     public ModelAndView userListPage(Model model){
         List<UserEntity> allUsers = userService.findAll();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails jwtUser = (UserDetails) auth.getPrincipal();
-        UserEntity user = userService.findByUsername(jwtUser.getUsername());
-        System.out.println(user.getUsername());
+        Optional<UserEntity> user = userService.findByUsername(jwtUser.getUsername());
+        System.out.println(user.isPresent() ? user.get().getUsername():null);
         ModelAndView modelAndView = new ModelAndView(listHTML);
         modelAndView.addObject("userlogedin", user);
         modelAndView.addObject("users", allUsers);
@@ -62,14 +49,9 @@ public class UserController {
 
     @GetMapping(value="/edit/{userId}")
     public ModelAndView editProductPage(Model model, @PathVariable("userId") String username){
-        UserEntity user = userService.findByUsername(username);
-        if (user!=null){
-            ModelAndView modelAndView = new ModelAndView(editHTML);
-            model.addAttribute("user", user);
-            return modelAndView;
-        }
-        ModelAndView modelAndView = new ModelAndView(listHTML);
-        modelAndView.addObject("user", user);
+        Optional<UserEntity> user = userService.findByUsername(username);
+        ModelAndView modelAndView = new ModelAndView(editHTML);
+        model.addAttribute("user", user);
         return modelAndView;
     }
 
@@ -84,7 +66,7 @@ public class UserController {
     public ResponseEntity<String> getUsername(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails jwtUser = (UserDetails) auth.getPrincipal();
-        UserEntity user = userService.findByUsername(jwtUser.getUsername());
+        Optional<UserEntity> user = userService.findByUsername(jwtUser.getUsername());
         return new ResponseEntity<String>(jwtUser.getUsername(), HttpStatus.OK);
     }
 
@@ -92,7 +74,10 @@ public class UserController {
     public ResponseEntity<String> getRole(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails jwtUser = (UserDetails) auth.getPrincipal();
-        UserEntity user = userService.findByUsername(jwtUser.getUsername());
-        return new ResponseEntity<String>(user.getType(), HttpStatus.OK);
+        Optional<UserEntity> user = userService.findByUsername(jwtUser.getUsername());
+        return user.map(userEntity ->
+                new ResponseEntity<>(userEntity.getType(), HttpStatus.OK))
+                .orElseGet(() ->
+                        new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 }
