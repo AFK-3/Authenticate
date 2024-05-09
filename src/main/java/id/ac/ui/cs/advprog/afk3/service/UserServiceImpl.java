@@ -9,12 +9,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,9 +22,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserEntity create(UserEntity user){
-        if(userRepository.findByUsername(user.getUsername())==null &&
+        System.out.println("userfindbyid "+user.getUsername()+userRepository.findById(user.getUsername()).isEmpty());
+        if(userRepository.findById(user.getUsername()).isEmpty() &&
                 fieldValid(user)){
-            userRepository.createUser(user);
+            user.setPassword(user.getPassword());
+            userRepository.save(user);
             return user;
         }else{
             throw new IllegalArgumentException();
@@ -35,48 +35,54 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public boolean fieldValid(UserEntity user){
         boolean phoneIsNumber = true;
-        for (Character c : user.getPhoneNumber().toCharArray()){
+        System.out.println(user.getUsername()+" "+user.getPhonenumber());
+        if (user.getPhonenumber()==null)return false;
+        for (Character c : user.getPhonenumber().toCharArray()){
             if(!Character.isDigit(c)){
                 phoneIsNumber=false;
                 break;
             }
         }
+        System.out.println(user.getUsername()+" "+(!user.getAddress().isEmpty() && phoneIsNumber));
         return !user.getAddress().isEmpty() && phoneIsNumber;
     }
 
     @Override
     public List<UserEntity> findAll(){
-        Iterator<UserEntity> userIterator=userRepository.findAll();
-        List<UserEntity> allUser = new ArrayList<>();
-        userIterator.forEachRemaining(allUser::add);
-        return allUser;
+         return userRepository.findAll();
     }
 
     @Override
-    public UserEntity findByUsername(String username){
-        return userRepository.findByUsername(username);
+    public Optional<UserEntity> findByUsername(String username){
+        return userRepository.findById(username);
     }
 
     @Override
     public void update (String userId, UserEntity user){
-        userRepository.update(userId, user);
+        Optional<UserEntity> userToUpdate = userRepository.findById(userId);
+        if(userToUpdate.isPresent()){
+            userToUpdate.get().setName(user.getName());
+            userToUpdate.get().setAddress(user.getAddress());
+            userToUpdate.get().setPhonenumber(user.getPhonenumber());
+            userRepository.save(userToUpdate.get());
+        }
     }
 
     @Override
     public void deleteUserById(String userId) {
-        userRepository.delete(userId);
+        userRepository.deleteById(userId);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("in loadByUsername");
-        UserEntity user = userRepository.findByUsername(username);
+        Optional<UserEntity> user = userRepository.findById(username);
         System.out.println(username);
-        if(user==null){
+        if(user.isEmpty()){
             throw new UsernameNotFoundException("user not found");
         }
         System.out.println(user);
-        return new User(user.getUsername(), user.getPassword(),mapToAuth(user.getType()));
+        return new User(user.get().getUsername(), user.get().getPassword(),mapToAuth(user.get().getType()));
     }
 
     private Collection<GrantedAuthority> mapToAuth(String type){

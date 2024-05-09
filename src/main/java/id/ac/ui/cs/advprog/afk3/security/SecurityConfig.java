@@ -1,11 +1,13 @@
 package id.ac.ui.cs.advprog.afk3.security;
 
 import id.ac.ui.cs.advprog.afk3.service.UserService;
+import id.ac.ui.cs.advprog.afk3.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,12 +21,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private UserService userDetailsService;
+
+    private UserServiceImpl userDetailsService;
 
     private JwtAuthEntryPoint authEntryPoint;
 
     @Autowired
-    public SecurityConfig(UserService userDetailsService, JwtAuthEntryPoint a) {
+    public SecurityConfig(UserServiceImpl userDetailsService, JwtAuthEntryPoint a) {
         this.userDetailsService = userDetailsService;
         this.authEntryPoint = a;
     }
@@ -51,10 +54,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        return authenticationManagerBuilder.build();
+
     }
 
     @Bean
