@@ -18,6 +18,10 @@ public class Afk3Application {
 	@Value("${app.sell-domain}")
 	String url_gcp_sell;
 	String URL_GCP_PAYMENT = "http://34.124.178.74";
+
+	@Value("${app.buy-domain}")
+	String URL_GCP_BUY;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Afk3Application.class, args);
 	}
@@ -97,5 +101,60 @@ public class Afk3Application {
 	@Bean
 	public RouterFunction<ServerResponse> toRespondPaymentRequestById() {
 		return route("payment-request/respond/**").PATCH("/payment-request/respond/**", http(URL_GCP_PAYMENT)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toAddToCart(){
+		return route("cart").POST("/cart",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toReduceListings(){
+		return route("cart/reduce").PUT("/cart/reduce",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toAddListings(){
+		return route("cart/add").PUT("/cart/add",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toDeleteListing(){
+		return route("cart").DELETE("/cart",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetCartByUsername(){
+		return route("cart/**").GET("/cart/**",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetAllCart(){
+		return route("cart").GET("/cart",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toCheckout(){
+		return route("transaction").POST("/transaction",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toUpdateTransactionStatus(){
+		return route("transaction/**").PUT("/transaction/**",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetAllTransaction(){
+		return route("transaction").GET("/transaction",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetTransactionByUser(){
+		return route("transaction/username").GET("/transaction/username",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetTransactionById(){
+		return route("transaction/id").GET("/transaction/id",http(URL_GCP_BUY)).build();
 	}
 }
