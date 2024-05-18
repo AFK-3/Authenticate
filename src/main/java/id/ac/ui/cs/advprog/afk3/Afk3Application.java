@@ -47,8 +47,14 @@ public class Afk3Application {
 	}
 	@Bean
 	public RouterFunction<ServerResponse> toGetListingGetBySeller(){
-		return route("listing/get-by-seller").POST("/listing/get-by-seller", http(url_gcp_sell)).build();
+		return route("listing/get-by-seller").GET("/listing/get-by-seller", http(url_gcp_sell)).build();
 	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetListingGetAll(){
+		return route("listing/get-all").GET("/listing/get-all", http(url_gcp_sell)).build();
+	}
+
 	@Bean
 	public RouterFunction<ServerResponse> toPostOrderCreate() {
 		return route("order/create").POST("/order/create", http(url_gcp_sell)).build();
