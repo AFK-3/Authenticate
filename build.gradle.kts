@@ -72,23 +72,6 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
-tasks.register<Test>("unitTest"){
-	description = "Runs unit tests"
-	group = "verification"
-
-	filter{
-		excludeTestsMatching("*FunctionalTest")
-	}
-}
-
-tasks.test {
-    filter {
-        excludeTestsMatching("*FunctionalTest")
-    }
-
-    finalizedBy(tasks.jacocoTestReport)
-}
-
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
