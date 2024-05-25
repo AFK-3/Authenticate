@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.afk3;
 
+import org.apache.catalina.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,8 @@ public class Afk3Application {
 	@Value("${app.sell-domain}")
 	String url_gcp_sell;
 	String URL_GCP_PAYMENT = "http://34.124.178.74";
+
+	final String URL_GCP_REVIEW = "http://34.124.202.219/";
 
 	@Value("${app.buy-domain}")
 	String URL_GCP_BUY;
@@ -156,5 +159,30 @@ public class Afk3Application {
 	@Bean
 	public RouterFunction<ServerResponse> toGetTransactionById(){
 		return route("transaction/id").GET("/transaction/id",http(URL_GCP_BUY)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetReviews() {
+		return route("review/getReview/**").GET("review/getReview/**", http(URL_GCP_REVIEW)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toCreateReview() {
+		return route("review/createReview/**").POST("review/createReview/**", http(URL_GCP_REVIEW)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toUpdateReview() {
+		return route("review/updateReview/**").PUT("review/updateReview/**", http(URL_GCP_REVIEW)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toDeleteReview() {
+		return route("review/deleteReview/**").DELETE("review/deleteReview/**", http(URL_GCP_REVIEW)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toAllowUserToReview() {
+		return route("review/allowUserToReview").POST("review/allowUserToReview", http(URL_GCP_REVIEW)).build();
 	}
 }
