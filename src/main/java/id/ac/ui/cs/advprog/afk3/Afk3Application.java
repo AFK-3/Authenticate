@@ -213,6 +213,11 @@ public class Afk3Application {
 	}
 
 	@Bean
+	public RouterFunction<ServerResponse> toGetAllListing() {
+		return route("featured-listing/get-all-listing").GET("featured-listing/get-all-listing", http(URL_GCP_FEATURED_LISTING)).build();
+	}
+
+	@Bean
 	public RouterFunction<ServerResponse> toEditFeaturedListing() {
 		return route("featured-listing/edit").PUT("featured-listing/edit", http(URL_GCP_FEATURED_LISTING)).build();
 	}
