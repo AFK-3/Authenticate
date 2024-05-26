@@ -24,6 +24,8 @@ public class Afk3Application {
 	@Value("${app.buy-domain}")
 	String URL_GCP_BUY;
 
+	String URL_GCP_FEATURED_LISTING = "http://35.197.133.115/";
+
 	public static void main(String[] args) {
 		SpringApplication.run(Afk3Application.class, args);
 	}
@@ -193,5 +195,35 @@ public class Afk3Application {
 	@Bean
 	public RouterFunction<ServerResponse> toAllowUserToReview() {
 		return route("review/allowUserToReview").POST("review/allowUserToReview", http(URL_GCP_REVIEW)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toCreateFeaturedListing() {
+		return route("featured-listing/createListing").POST("featured-listing/createListing", http(URL_GCP_FEATURED_LISTING)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetFeaturedListingById() {
+		return route("featured-listing/**").GET("featured-listing/**", http(URL_GCP_FEATURED_LISTING)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toGetAllFeaturedListing() {
+		return route("featured-listing/get-all").GET("featured-listing/get-all", http(URL_GCP_FEATURED_LISTING)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toEditFeaturedListing() {
+		return route("featured-listing/edit").PUT("featured-listing/edit", http(URL_GCP_FEATURED_LISTING)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toDeleteFeaturedListing() {
+		return route("featured-listing/delete/**").DELETE("featured-listing/delete/**", http(URL_GCP_FEATURED_LISTING)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toDeleteAllFeaturedListing() {
+		return route("featured-listing/delete-all").DELETE("featured-listing/delete-all", http(URL_GCP_FEATURED_LISTING)).build();
 	}
 }
