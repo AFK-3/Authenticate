@@ -82,7 +82,7 @@ public class Afk3Application {
 
 	@Bean
 	public RouterFunction<ServerResponse> toGetAllPaymentRequestByUsername() {
-		return route("payment-request/get-all-by-buyer-username/**").GET("/payment-request/get-all-by-buyer-username/**", http(URL_GCP_PAYMENT)).build();
+		return route("payment-request/get-all-by-buyer-username").GET("/payment-request/get-all-by-buyer-username", http(URL_GCP_PAYMENT)).build();
 	}
 
 	@Bean
@@ -96,13 +96,23 @@ public class Afk3Application {
 	}
 
 	@Bean
+	public RouterFunction<ServerResponse> toDeleteAll() {
+		return route("payment-request/delete-all").DELETE("/payment-request/delete-all", http(URL_GCP_PAYMENT)).build();
+	}
+
+	@Bean
 	public RouterFunction<ServerResponse> toCancelPaymentRequestById() {
-		return route("payment-request/cancel/**").PATCH("/payment-request/cancel/**", http(URL_GCP_PAYMENT)).build();
+		return route("payment-request/cancel/**").PUT("/payment-request/cancel/**", http(URL_GCP_PAYMENT)).build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> toEditPaymentRequestById() {
+		return route("payment-request/edit/**").PUT("/payment-request/edit/**", http(URL_GCP_PAYMENT)).build();
 	}
 
 	@Bean
 	public RouterFunction<ServerResponse> toRespondPaymentRequestById() {
-		return route("payment-request/respond/**").PATCH("/payment-request/respond/**", http(URL_GCP_PAYMENT)).build();
+		return route("payment-request/respond/**").PUT("/payment-request/respond/**", http(URL_GCP_PAYMENT)).build();
 	}
 
 	@Bean
